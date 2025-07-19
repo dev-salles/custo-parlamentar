@@ -1,61 +1,23 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Custo Parlamentar: Descrição e Importância do Projeto
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+O projeto **Custo Parlamentar** reside na sua capacidade de integrar dados da API oficial da Câmara dos Deputados. Utilizando **Laravel Jobs**, o sistema faz requisições assíncronas para buscar informações cruciais, como o tipo de despesa (passagens aéreas, aluguel de escritórios, combustível, etc.), o valor gasto, o fornecedor de cada serviço ou produto e o período em que a despesa ocorreu.
 
-## About Laravel
+Uma vez coletados, esses dados são cuidadosamente persistidos em um banco de dados **MySQL**. Essa centralização e estruturação das informações permitem não apenas consultas eficientes, mas também a base para análises mais complexas e visualizações que tornam as despesas mais compreensíveis. Todo o ambiente de desenvolvimento é isolado e replicável graças ao **Docker**, garantindo uma configuração descomplicada e um deploy consistente.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Importância do Projeto
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+A relevância do Custo Parlamentar transcende o aspecto técnico, impactando diretamente a transparência e a fiscalização do dinheiro público:
 
-## Learning Laravel
+* **Promovendo a Transparência:** O projeto atua como uma ponte entre os dados brutos da Câmara e o cidadão comum. Ao organizar e exibir as despesas de forma clara, ele democratiza o acesso à informação, facilitando que qualquer pessoa entenda como o dinheiro dos impostos está sendo utilizado pelos representantes eleitos.
+* **Fortalecendo a Fiscalização Cidadã:** Com acesso facilitado a informações detalhadas, o Custo Parlamentar empodera a sociedade civil, jornalistas e pesquisadores. A ferramenta permite uma análise aprofundada dos padrões de gastos, possibilitando a identificação de anomalias ou o acompanhamento de tendências, o que é vital para uma fiscalização eficaz.
+* **Base para Análise e Insights:** Os dados centralizados no MySQL abrem portas para análises mais sofisticadas. É possível gerar relatórios, gráficos comparativos entre deputados ou períodos, e identificar categorias de despesas que mais consomem recursos. Essa capacidade de gerar insights qualificados é fundamental para debates públicos informados sobre a gestão dos recursos parlamentares.
+* **Demonstração de Habilidades Técnicas:** Para o contexto de um teste técnico, o Custo Parlamentar é uma excelente vitrine para proficiência em:
+    * **Docker:** Orquestração de serviços e gerenciamento de ambientes.
+    * **PHP/Laravel:** Desenvolvimento backend robusto, manipulação de filas (Jobs) e integração com banco de dados.
+    * **MySQL:** Modelagem de dados e otimização de consultas.
+    * **Consumo de APIs:** Interação com serviços externos.
+    * **Arquitetura de Software:** Design para processamento de dados assíncrono e escalabilidade.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Em resumo, Custo Parlamentar não é apenas um exercício de programação, mas uma ferramenta prática que visa contribuir para a prestação de contas, a participação cívica e a saúde democrática, ao mesmo tempo em que demonstra um sólido domínio das tecnologias envolvidas.
