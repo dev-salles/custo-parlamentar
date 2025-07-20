@@ -6,13 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('deputados', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // ID local
+            $table->integer('id_api')->unique(); // ID da API da Câmara
+            $table->string('nome');
+            $table->string('sigla_partido');
+            $table->string('url_foto')->nullable();
+            // Adicione outros campos que você precisar da API
             $table->timestamps();
         });
     }

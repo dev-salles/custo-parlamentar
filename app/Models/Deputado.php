@@ -1,29 +1,27 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Models;
 
-return new class extends Migration
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Deputado extends Model
 {
-    public function up(): void
-    {
-        Schema::create('deputados', function (Blueprint $table) {
-            $table->id(); // ID local
-            $table->integer('id_api')->unique(); // ID da API da Câmara
-            $table->string('nome');
-            $table->string('sigla_partido');
-            $table->string('url_foto')->nullable();
-            // Adicione outros campos que você precisar da API
-            $table->timestamps();
-        });
-    }
+    use HasFactory;
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('deputados');
-    }
-};
+    // Para que o Deputado::updateOrCreate funcione, você precisa
+    // definir quais campos podem ser preenchidos em massa (mass assignable).
+    // A forma mais comum é usar $fillable.
+    protected $fillable = [
+        'id_api',
+        'nome',
+        'sigla_partido',
+        'url_foto',
+    ];
+
+    // Opcional: Se sua chave primária na API não é 'id', mas 'id_api' por exemplo,
+    // você pode precisar especificar isso, mas para o updateOrCreate,
+    // o 'id_api' que você está usando como chave de busca já resolve.
+    // protected $primaryKey = 'id_api';
+    // public $incrementing = false; // Se o id_api não for auto-incrementável localmente
+}
