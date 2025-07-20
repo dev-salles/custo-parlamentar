@@ -22,25 +22,23 @@ services:
       - .:/var/www/html
     environment:
       DB_CONNECTION: mysql
-      DB_HOST: mysql
+      DB_HOST: mysql_db
       DB_PORT: 3306
       DB_DATABASE: laravel_db
-      DB_USERNAME: user
-      DB_PASSWORD: password
+      DB_USERNAME: root
+      DB_PASSWORD: 123
     depends_on:
-      - mysql
+      - mysql_db
     # Não precisa de 'command' ou 'entrypoint' explícitos aqui, o Dockerfile vai cuidar disso
 
   # Serviço MySQL (banco de dados)
-  mysql:
+  mysql_db:
     image: mysql:8.0
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_ROOT_PASSWORD: 123
       MYSQL_DATABASE: laravel_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
     volumes:
       - db_data:/var/lib/mysql
 

@@ -15,7 +15,11 @@ RUN apk add --no-cache \
     make \
     # Outras dependências comuns
     libxml2-dev \
-    icu-dev
+    icu-dev 
+
+RUN docker-php-ext-install pdo pdo_mysql    
+
+RUN apk update && apk add --no-cache curl libzip-dev sqlite-dev g++ make libxml2-dev icu-dev
 
 # Limpa dependências de construção para reduzir o tamanho final da imagem
 RUN apk del autoconf g++ make
