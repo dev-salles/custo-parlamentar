@@ -2,40 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\CamaraDeputadosService;
+use App\Models\Deputado;
 use Illuminate\Http\Request;
 
-class DeputadosController extends Controller
+class DeputadoController extends Controller
 {
-    protected $camaraService;
-
-    public function __construct(CamaraDeputadosService $camaraService)
-    {
-        $this->camaraService = $camaraService;
-    }
-
+    /**
+     * Exibe a lista paginada de deputados.
+     */
     public function index()
     {
-        $deputados = $this->camaraService->getDeputados();
+        // Pega todos os deputados do banco de dados com paginação
+        // O método paginate() retorna uma instância de LengthAwarePaginator
+        // que facilita a exibição da paginação na view.
+        $deputados = Deputado::orderBy('nome')->paginate(10); // 10 deputados por página
 
-        if ($deputados) {
-            return view('deputados.index', ['deputados' => $deputados]);
-        }
-
-        return back()->with('error', 'Não foi possível carregar os dados dos deputados.');
+        return view('deputados.index', compact('deputados'));
     }
 
-    public function showDespesas($id, Request $request)
+    /**
+     * Exibe as despesas de um deputado específico.
+     *
+     * @param \App\Models\Deputado $deputado
+     * @return \Illuminate\View\View
+     */
+    public function showExpenses(Deputado $deputado)
     {
-        $ano = $request->input('ano', date('Y'));
-        $mes = $request->input('mes', date('m'));
+        // Carrega as despesas relacionadas ao deputado.
+        // Se você quiser paginar as despesas também:
+        $despesas = $deputado->despesas()->orderBy('data_documento', 'desc')->paginate(20); // 20 despesas por página
 
-        $despesas = $this->camaraService->getDespesasDeputado($id, $ano, $mes);
+        // Ou, se não quiser paginar as despesas, apenas todas elas:
+        // $despesas = $deputado->despesas()->orderBy('data_documento', 'desc')->get();
 
-        if ($despesas) {
-            return view('deputados.despesas', ['despesas' => $despesas, 'deputadoId' => $id]);
-        }
-
-        return back()->with('error', 'Não foi possível carregar as despesas do deputado.');
+        return view('deputados.show_expenses', compact('deputado', 'despesas'));
     }
 }

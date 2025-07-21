@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('deputados', function (Blueprint $table) {
             $table->id(); // ID local
             $table->integer('id_api')->unique(); // ID da API da Câmara
-            $table->string('nome');
+            $table->string('nome') ->charset('utf8mb4')->collation('utf8mb4_unicode_ci');
             $table->string('sigla_partido');
             $table->string('url_foto')->nullable();
             // Adicione outros campos que você precisar da API
