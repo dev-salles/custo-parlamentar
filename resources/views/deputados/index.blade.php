@@ -1,49 +1,84 @@
-<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Deputados</title>
+    
+    <!-- Link para o favicon -->
+    <link rel="icon" type="image/png" href="/favicon.ico"> 
+    
+    <title>Custo Parlamentar - Câmara dos Deputados</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #333; margin-bottom: 30px; }
-        .deputado-card { display: flex; align-items: center; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 15px; padding: 10px; background-color: #fff; }
-        .deputado-card img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-right: 15px; }
-        .deputado-info h2 { margin: 0; font-size: 1.2em; color: #007bff; }
-        .deputado-info p { margin: 5px 0; color: #555; }
-        .deputado-info a { text-decoration: none; color: #007bff; font-weight: bold; }
-        .deputado-info a:hover { text-decoration: underline; }
-        .pagination { margin-top: 20px; text-align: center; }
-        .pagination ul { list-style: none; padding: 0; display: inline-flex; }
-        .pagination li { margin: 0 5px; }
-        .pagination li a, .pagination li span { display: block; padding: 8px 12px; border: 1px solid #ddd; text-decoration: none; color: #007bff; border-radius: 4px; }
-        .pagination li.active span { background-color: #007bff; color: white; border-color: #007bff; }
-        .pagination li a:hover:not(.active) { background-color: #f0f0f0; }
+        /* Estilos personalizados que não são facilmente substituíveis pelo Tailwind, ou para overrides */
+        body { 
+            font-family: Arial, sans-serif; 
+        }
+        /* O restante dos estilos que eram para .container, .deputado-card, etc., 
+           serão substituídos por classes Tailwind diretamente no HTML.
+           Mantenho alguns aqui para referência, mas o ideal é que tudo seja Tailwind. */
+
+        /* Estilos específicos para o card do deputado, se não puder ser 100% Tailwind */
+        .deputado-card img { 
+            object-fit: cover; 
+        }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Lista de Deputados Federais</h1>
+<body class="bg-gray-100 p-5 flex justify-center items-start min-h-screen">
+    <div class="container max-w-4xl w-full mx-auto bg-white p-6 rounded-lg shadow-lg mt-5">
+        <!-- Título em negrito e centralizado com Tailwind -->
+        <h1 class="text-3xl text-gray-800 font-bold text-center mb-8">Lista de Deputados Federais</h1>
+
+        <!-- Barra de pesquisa com Tailwind -->
+        <div class="search-bar flex justify-center mb-6">
+            <form action="{{ route('deputados.index') }}" method="GET" class="flex w-full max-w-2xl">
+                <input 
+                    type="text" 
+                    name="search" 
+                    placeholder="Pesquisar por nome..." 
+                    value="{{ request('search') }}"
+                    class="flex-grow p-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+                >
+                <button 
+                    type="submit"
+                    class="px-6 py-3 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition duration-300 ease-in-out text-lg"
+                >
+                    Buscar
+                </button>
+            </form>
+        </div>
 
         <div class="deputados-list">
             @forelse ($deputados as $deputado)
-                <div class="deputado-card">
-                    <img src="{{ $deputado->url_foto }}" alt="Foto de {{ $deputado->nome }}">
+                <div class="deputado-card flex items-center border border-gray-200 rounded-lg mb-4 p-4 bg-white shadow-sm hover:shadow-md transition duration-200 ease-in-out transform hover:-translate-y-1">
+                    <img 
+                        src="{{ $deputado->url_foto }}" 
+                        alt="Foto de {{ $deputado->nome }}"
+                        class="w-20 h-20 rounded-full mr-4 border-2 border-blue-500"
+                    >
                     <div class="deputado-info">
-                        <h2>{{ $deputado->nome }}</h2>
-                        <p>Partido: {{ $deputado->sigla_partido }}</p>
-                        <a href="{{ route('deputados.despesas', $deputado->id) }}">Ver Despesas</a>
+                        <h2 class="text-xl text-blue-600 font-semibold mb-1">{{ $deputado->nome }}</h2>
+                        <p class="text-gray-600 text-base mb-2">Partido: {{ $deputado->sigla_partido }}</p>
+                        <a 
+                            href="{{ route('deputados.despesas', $deputado->id) }}"
+                            class="inline-block mt-2 px-4 py-2 bg-blue-500 text-white font-bold rounded-md hover:bg-blue-600 transition duration-300 ease-in-out"
+                        >
+                            Ver Despesas
+                        </a>
                     </div>
                 </div>
             @empty
-                <p>Nenhum deputado encontrado.</p>
+                <p class="text-center text-gray-600 italic p-5">Nenhum deputado encontrado.</p>
             @endforelse
         </div>
 
-        <div class="pagination">
+        <!-- Links de Paginação (serão estilizados pelo Tailwind via Paginator::useTailwind()) -->
+        <div class="mt-8 flex justify-center">
             {{ $deputados->links() }}
         </div>
+
     </div>
 </body>
 </html>
