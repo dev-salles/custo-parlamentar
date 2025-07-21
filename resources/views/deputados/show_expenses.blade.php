@@ -6,19 +6,32 @@
     <title>Despesas de {{ $deputado->nome }}</title>
     <link rel="icon" type="image/png" href="/favicon.ico"> 
     <style>
+        /* Adicione esta regra CSS no início do seu bloco <style> */
+        * {
+            box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura/altura */
+        }
+
         body { 
             font-family: Arial, sans-serif; 
-            margin: 20px; 
+            margin: 0; 
             background-color: #f4f4f4; 
             display: flex; 
-            justify-content: center; 
-            min-height: 90vh; 
-            align-items: flex-start; 
+            flex-direction: column; 
+            min-height: 100vh; 
+            overflow-x: hidden; /* Adicione esta linha para esconder barras de rolagem horizontais indesejadas */
         }
+        
+        .content-wrapper { 
+            flex-grow: 1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            padding: 20px; 
+        }
+
         .container { 
             max-width: 900px; 
             width: 100%; 
-            margin: 20px auto; 
             background: white; 
             padding: 20px; 
             border-radius: 8px; 
@@ -42,7 +55,7 @@
             border-radius: 50%; 
             object-fit: cover; 
             margin-right: 20px; 
-            border: 2px solid #007bff; /* Borda colorida na imagem */
+            border: 2px solid #007bff; 
         }
         .deputado-info-header h2 { 
             margin: 0; 
@@ -54,7 +67,7 @@
             color: #555; 
         }
         .back-link { 
-            display: inline-block; /* Para o botão de voltar */
+            display: inline-block; 
             margin-bottom: 15px; 
             text-decoration: none; 
             color: #007bff; 
@@ -70,14 +83,14 @@
         }
         .filter-form {
             display: flex;
-            gap: 10px; /* Espaço entre os elementos do formulário */
+            gap: 10px; 
             margin-bottom: 20px;
             padding: 15px;
-            background-color: #f0f8ff; /* Cor de fundo suave para o formulário */
+            background-color: #f0f8ff; 
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            flex-wrap: wrap; /* Permite que os elementos quebrem linha em telas pequenas */
-            justify-content: center; /* Centraliza os itens */
+            flex-wrap: wrap; 
+            justify-content: center; 
             align-items: center;
         }
         .filter-form label {
@@ -93,7 +106,7 @@
             cursor: pointer;
         }
         .filter-form button {
-            background-color: #28a745; /* Cor verde para o botão de filtro */
+            background-color: #28a745; 
             color: white;
             border: none;
             transition: background-color 0.3s ease;
@@ -107,11 +120,11 @@
             padding: 15px; 
             margin-bottom: 10px; 
             background-color: #f9f9f9; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra suave para os cards */
-            transition: transform 0.2s ease; /* Efeito de hover nos cards */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+            transition: transform 0.2s ease; 
         }
         .despesa-item:hover {
-            transform: translateY(-3px); /* Leve levantamento no hover */
+            transform: translateY(-3px); 
         }
         .despesa-item h3 { 
             margin-top: 0; 
@@ -139,7 +152,7 @@
             font-style: italic;
         }
 
-        /* Estilos da Paginação (repetidos aqui para garantir que funcionem na view de despesas) */
+        /* Estilos da Paginação */
         .pagination { 
             margin-top: 30px; 
             text-align: center; 
@@ -185,68 +198,81 @@
             background-color: #f8f9fa;
             border-color: #dee2e6;
         }
+
+        /* Estilos para o Footer */
+        footer {
+            background-color: #333; 
+            color: white; 
+            padding: 15px; 
+            text-align: center; 
+            width: 100%; 
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="{{ route('deputados.index') }}" class="back-link">&larr; Voltar para a lista de Deputados</a>
+    <div class="content-wrapper">
+        <div class="container">
+            <a href="{{ route('deputados.index') }}" class="back-link">&larr; Voltar para a lista de Deputados</a>
 
-        <div class="deputado-info-header">
-            <img src="{{ $deputado->url_foto }}" alt="Foto de {{ $deputado->nome }}">
-            <div>
-                <h2>Despesas de {{ $deputado->nome }}</h2>
-                <p>Partido: {{ $deputado->sigla_partido }}</p>
-            </div>
-        </div>
-
-        <!-- Formulário de Filtro por Ano e Mês -->
-        <form action="{{ route('deputados.despesas', $deputado->id) }}" method="GET" class="filter-form">
-            <label for="year">Ano:</label>
-            <select name="year" id="year">
-                <option value="">Todos</option> {{-- Opção para não filtrar por ano --}}
-                @foreach ($availableYears as $y)
-                    <option value="{{ $y }}" {{ (string)$y === (string)$year ? 'selected' : '' }}>{{ $y }}</option>
-                @endforeach
-            </select>
-
-            <label for="month">Mês:</label>
-            <select name="month" id="month">
-                <option value="">Todos</option> {{-- Opção para não filtrar por mês --}}
-                @php
-                    $meses = [
-                        1 => 'Janeiro', 2 => 'Fevereiro', 3 => 'Março', 4 => 'Abril',
-                        5 => 'Maio', 6 => 'Junho', 7 => 'Julho', 8 => 'Agosto',
-                        9 => 'Setembro', 10 => 'Outubro', 11 => 'Novembro', 12 => 'Dezembro'
-                    ];
-                @endphp
-                @foreach ($meses as $num => $nome)
-                    <option value="{{ $num }}" {{ (string)$num === (string)$month ? 'selected' : '' }}>{{ $nome }}</option>
-                @endforeach
-            </select>
-
-            <button type="submit">Filtrar Despesas</button>
-        </form>
-
-        <h3>Lista de Despesas</h3>
-
-        <div class="despesas-list">
-            @forelse ($despesas as $despesa)
-                <div class="despesa-item">
-                    <h3>{{ $despesa->tipo_despesa }}</h3>
-                    <p><strong>Valor:</strong> R$ {{ number_format($despesa->valor_documento, 2, ',', '.') }}</p>
-                    <p><strong>Data:</strong> {{ \Carbon\Carbon::parse($despesa->data_documento)->format('d/m/Y') }}</p>
-                    <p><strong>Fornecedor:</strong> {{ $despesa->nome_fornecedor }}</p>
-                    @if ($despesa->url_documento)
-                        <p><a href="{{ $despesa->url_documento }}" target="_blank">Ver Documento</a></p>
-                    @endif
+            <div class="deputado-info-header">
+                <img src="{{ $deputado->url_foto }}" alt="Foto de {{ $deputado->nome }}">
+                <div>
+                    <h2>Despesas de {{ $deputado->nome }}</h2>
+                    <p>Partido: {{ $deputado->sigla_partido }}</p>
                 </div>
-            @empty
-                <p class="no-expenses">Nenhuma despesa encontrada para este deputado com os filtros selecionados.</p>
-            @endforelse
-        </div>
+            </div>
 
-        <!-- Links de Paginação -->
-        {{ $despesas->links() }}
+            <form action="{{ route('deputados.despesas', $deputado->id) }}" method="GET" class="filter-form">
+                <label for="year">Ano:</label>
+                <select name="year" id="year">
+                    <option value="">Todos</option> {{-- Opção para não filtrar por ano --}}
+                    @foreach ($availableYears as $y)
+                        <option value="{{ $y }}" {{ (string)$y === (string)$year ? 'selected' : '' }}>{{ $y }}</option>
+                    @endforeach
+                </select>
+
+                <label for="month">Mês:</label>
+                <select name="month" id="month">
+                    <option value="">Todos</option> {{-- Opção para não filtrar por mês --}}
+                    @php
+                        $meses = [
+                            1 => 'Janeiro', 2 => 'Fevereiro', 3 => 'Março', 4 => 'Abril',
+                            5 => 'Maio', 6 => 'Junho', 7 => 'Julho', 8 => 'Agosto',
+                            9 => 'Setembro', 10 => 'Outubro', 11 => 'Novembro', 12 => 'Dezembro'
+                        ];
+                    @endphp
+                    @foreach ($meses as $num => $nome)
+                        <option value="{{ $num }}" {{ (string)$num === (string)$month ? 'selected' : '' }}>{{ $nome }}</option>
+                    @endforeach
+                </select>
+
+                <button type="submit">Filtrar Despesas</button>
+            </form>
+
+            <h3>Lista de Despesas</h3>
+
+            <div class="despesas-list">
+                @forelse ($despesas as $despesa)
+                    <div class="despesa-item">
+                        <h3>{{ $despesa->tipo_despesa }}</h3>
+                        <p><strong>Valor:</strong> R$ {{ number_format($despesa->valor_documento, 2, ',', '.') }}</p>
+                        <p><strong>Data:</strong> {{ \Carbon\Carbon::parse($despesa->data_documento)->format('d/m/Y') }}</p>
+                        <p><strong>Fornecedor:</strong> {{ $despesa->nome_fornecedor }}</p>
+                        @if ($despesa->url_documento)
+                            <p><a href="{{ $despesa->url_documento }}" target="_blank">Ver Documento</a></p>
+                        @endif
+                    </div>
+                @empty
+                    <p class="no-expenses">Nenhuma despesa encontrada para este deputado com os filtros selecionados.</p>
+                @endforelse
+            </div>
+
+            {{ $despesas->links() }}
+        </div>
     </div>
+
+    <footer>
+        <p>&copy; {{ date('Y') }} Custo Parlamentar. Todos os direitos reservados. Desenvolvido por <a href="https://www.linkedin.com/in/thesalles/">Davi Sales Barcelos</a></p>
+    </footer>
 </body>
 </html>
