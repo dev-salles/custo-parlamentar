@@ -8,26 +8,36 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('despesas_deputados', function (Blueprint $table) {
+        Schema::create('despesas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('deputado_id')->constrained('deputados')->onDelete('cascade'); // Chave estrangeira
-            $table->integer('id_api_despesa')->unique()->nullable(); // ID único da despesa, se a API fornecer
-            $table->string('tipo_despesa');
-            $table->date('data_documento')->nullable();
-            $table->string('tipo_documento')->nullable();
-            $table->string('cod_documento')->nullable();
-            $table->decimal('valor_documento', 10, 2); // Valor será formatado com 2 casas decimais. Exemplo: 50,00.
-            $table->decimal('valor_liquido', 10, 2);
-            $table->string('url_documento')->nullable();
-            $table->string('nome_fornecedor')->nullable();
-            $table->string('cnpj_cpf_fornecedor')->nullable();
-            $table->string('num_nota_fiscal')->nullable(); 
+
+            // Campos diretamente mapeados da API
+            $table->integer('ano')->nullable();
+            $table->integer('mes')->nullable();
+            $table->string('tipo_despesa')->nullable();
+            $table->integer('cod_documento')->nullable(); // codDocumento
+            $table->string('tipo_documento')->nullable(); // tipoDocumento
+            $table->integer('cod_tipo_documento')->nullable(); // codTipoDocumento
+            $table->date('data_documento')->nullable(); // dataDocumento - convertemos para 'date'
+            $table->string('num_documento')->nullable(); // numDocumento (parece ser a NF)
+            $table->decimal('valor_documento', 10, 2)->nullable(); // valorDocumento
+            $table->string('url_documento')->nullable(); // urlDocumento
+            $table->string('nome_fornecedor')->nullable(); // nomeFornecedor
+            $table->string('cnpj_cpf_fornecedor')->nullable(); // cnpjCpfFornecedor
+            $table->decimal('valor_liquido', 10, 2)->nullable(); // valorLiquido
+            $table->decimal('valor_glosa', 10, 2)->nullable(); // valorGlosa
+            $table->string('num_ressarcimento')->nullable(); // numRessarcimento
+            $table->integer('cod_lote')->nullable(); // codLote
+            $table->integer('parcela')->nullable(); // parcela
+
+            // Outros campos de controle
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('despesas_deputados');
+        Schema::dropIfExists('despesas');
     }
 };

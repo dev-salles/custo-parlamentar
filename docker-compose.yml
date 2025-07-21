@@ -15,9 +15,9 @@ services:
 
   # Serviço PHP - AGORA COM 'BUILD'
   php:
-    build: # Usaremos um Dockerfile local para construir a imagem do PHP
+    build: 
       context: .
-      dockerfile: docker/php/Dockerfile # Caminho para o Dockerfile que criaremos
+      dockerfile: docker/php/Dockerfile
     volumes:
       - .:/var/www/html
     environment:
@@ -29,7 +29,6 @@ services:
       DB_PASSWORD: 123
     depends_on:
       - mysql_db
-    # Não precisa de 'command' ou 'entrypoint' explícitos aqui, o Dockerfile vai cuidar disso
 
   # Serviço MySQL (banco de dados)
   mysql_db:

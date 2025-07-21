@@ -17,7 +17,12 @@ RUN apk add --no-cache \
     libxml2-dev \
     icu-dev 
 
+# Instalar a extensão pdo_mysql 
 RUN docker-php-ext-install pdo pdo_mysql    
+
+
+# Instalar o composer no meu container 
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 RUN apk update && apk add --no-cache curl libzip-dev sqlite-dev g++ make libxml2-dev icu-dev
 

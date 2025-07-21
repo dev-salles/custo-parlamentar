@@ -11,20 +11,32 @@ class Despesa extends Model
 
     protected $fillable = [
         'deputado_id',
-        'id_api_despesa', // Se a API retornar um ID único para a despesa
+        'ano',
+        'mes',
         'tipo_despesa',
-        'data_documento',
-        'tipo_documento',
         'cod_documento',
+        'tipo_documento',
+        'cod_tipo_documento',
+        'data_documento',
+        'num_documento',
         'valor_documento',
-        'valor_liquido',
         'url_documento',
         'nome_fornecedor',
         'cnpj_cpf_fornecedor',
-        'num_nota_fiscal',
+        'valor_liquido',
+        'valor_glosa',
+        'num_ressarcimento',
+        'cod_lote',
+        'parcela',
     ];
 
-    // Relação inversa
+    protected $casts = [
+        'data_documento' => 'date', // Garante que data_documento seja um objeto Carbon
+        'valor_documento' => 'decimal:2',
+        'valor_liquido' => 'decimal:2',
+        'valor_glosa' => 'decimal:2',
+    ];
+
     public function deputado()
     {
         return $this->belongsTo(Deputado::class);
