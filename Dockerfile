@@ -61,7 +61,7 @@ RUN mkdir -p /var/log/supervisor
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/log/supervisor /var/run
 
 # Define permissões de gravação para o grupo 
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/log/supervisor /var/run
+RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/log/supervisor /var/run
 
 # Remove as dependências de compilação para reduzir o tamanho final da imagem
 RUN apk del autoconf g++ make
