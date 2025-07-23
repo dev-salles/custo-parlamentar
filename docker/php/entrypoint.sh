@@ -7,7 +7,7 @@ echo "Iniciando o script de entrypoint..."
 
 # Aguarda o banco de dados estar disponível usando o script compatível com sh
 echo "Aguardando o banco de dados MySQL estar pronto..."
-/usr/local/bin/wait-for-db.sh "$$DB_HOST" "$DB_PORT" -- echo "MySQL está pronto!"
+/usr/local/bin/wait-for-db.sh "$DB_HOST" "$DB_PORT" -- echo "MySQL está pronto!"
 
 Executa composer install se a pasta vendor não existir
 if [ ! -d "/var/www/html/vendor" ]; then
