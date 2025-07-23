@@ -33,7 +33,7 @@ RUN echo '#!/bin/sh' > /usr/local/bin/wait-for-db.sh && \
     echo 'shift 2' >> /usr/local/bin/wait-for-db.sh && \
     echo 'cmd="$@"' >> /usr/local/bin/wait-for-db.sh && \
     echo '' >> /usr/local/bin/wait-for-db.sh && \
-    echo 'until nc -z "$host" "$port"; do' >> /usr/local/bin/wait-for-db.sh && \
+    echo 'until nc -w 1 -z "$host" "$port"; do' >> /usr/local/bin/wait-for-db.sh && \
     echo '  echo "Aguardando o banco de dados em $host:$port..."' >> /usr/local/bin/wait-for-db.sh && \
     echo '  sleep 1' >> /usr/local/bin/wait-for-db.sh && \
     echo 'done' >> /usr/local/bin/wait-for-db.sh && \
