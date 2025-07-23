@@ -7,7 +7,7 @@ echo "Iniciando o script de entrypoint..."
 
 # Aguarda o banco de dados estar disponível usando o script compatível com sh
 echo "Aguardando o banco de dados MySQL estar pronto..."
-/usr/local/bin/wait-for-db.sh "$MYSQLHOST" "$MYSQLPORT" -- echo "MySQL está pronto!"
+/usr/local/bin/wait-for-db.sh "$$DB_HOST" "$DB_PORT" -- echo "MySQL está pronto!"
 
 Executa composer install se a pasta vendor não existir
 if [ ! -d "/var/www/html/vendor" ]; then
@@ -53,13 +53,13 @@ else
 fi
 
 
-# --- COMANDO: Executa import:despesas-deputados se a tabela estiver vazia ---
+# Executa import:despesas-deputados se a tabela estiver vazia
 echo "--- Verificação de Despesas ---"
 echo "Verificando contagem inicial da tabela 'despesas'..."
 DESPESAS_COUNT=$(php artisan db:seed --class="CheckDespesasDeputadosTableSeeder" --force 2>/dev/null | tail -n 1)
 echo "Contagem inicial de despesas: '$DESPESAS_COUNT'"
 
-# --- CORREÇÃO AQUI: Verifica se a contagem é '0' OU se a string está vazia ---
+# Verifica se a contagem é '0' OU se a string está vazia
 if [ "$DESPESAS_COUNT" = "0" ] || [ -z "$DESPESAS_COUNT" ]; then
     echo "Tabela de despesas de deputados vazia ou a contagem retornou vazia. Importando dados de despesas de deputados..."
     php artisan import:despesas-deputados
