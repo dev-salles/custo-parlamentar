@@ -15,7 +15,8 @@ RUN apk add --no-cache \
     make \
     # Outras dependências comuns
     libxml2-dev \
-    icu-dev 
+    icu-dev \
+    nginx
 
 # Limpa o cache do apk imediatamente após a instalação para reduzir o tamanho da imagem
 RUN rm -rf /var/cache/apk/*
@@ -48,6 +49,13 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 # Copia a configuração do Supervisor
 COPY docker/php/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# NOVO: Criar um arquivo de configuração mínimo para o Nginx interno (para o Health Check) 
+COPY docker/php/healthcheck_nginx.conf /etc/nginx/nginx.conf
+
+# Criar uma página de status para o Health Check
+# Isso garante que a rota /healthz retorne um 200 OK
+RUN mkdir -p /var/www/healthz && echo "OK" > /var/www/healthz/index.html
+
 # Remove as dependências de compilação para reduzir o tamanho final da imagem
 RUN apk del autoconf g++ make
 
@@ -76,8 +84,11 @@ RUN mkdir -p /var/www/html/storage/logs \
 # Isso é importante para que os processos PHP não rodem como root
 USER www-data
 
-# Expõe a porta 9000
+# Expõe a porta 9000 - Externo
 EXPOSE 9000
+
+# Expõe a porta 9000 - Interno
+EXPOSE 80
 
 # Define o script de entrypoint como o ponto de entrada do contêiner
 ENTRYPOINT ["/bin/sh", "/usr/local/bin/entrypoint.sh"]

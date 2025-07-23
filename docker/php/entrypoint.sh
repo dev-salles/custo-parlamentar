@@ -5,6 +5,14 @@ set -e
 
 echo "Iniciando o script de entrypoint..."
 
+# Iniciar Nginx em segundo plano para o Health Check do Render
+echo "Iniciando Nginx para Health Check..."
+# O Nginx rodará em background, escutando na porta 80 para o Health Check do Render.
+/usr/sbin/nginx -g 'daemon off;' &
+# Um pequeno atraso para o Nginx ter certeza de que iniciou antes do próximo passo
+sleep 1
+
+
 # Aguarda o banco de dados estar disponível usando o script compatível com sh
 echo "Aguardando o banco de dados MySQL estar pronto..."
 /usr/local/bin/wait-for-db.sh "$DB_HOST" "$DB_PORT" -- echo "MySQL está pronto!"
