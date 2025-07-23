@@ -57,23 +57,21 @@ WORKDIR /var/www/html
 # Copia todos os arquivos da sua aplicação para o diretório de trabalho do container
 COPY . /var/www/html
 
-# Criando pastas storage e bootstrap/cache
-RUN mkdir -p /var/www/html/storage /var/www/html/storage/logs /var/www/html/bootstrap/cache 
+# Instala dependências do composer
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
-# Cria o diretório para os logs do Supervisor e o diretório /var/run
-RUN mkdir -p /var/log/supervisor /var/run
-
-# Cria o diretório para os logs do Supervisor
-RUN mkdir -p /var/log/supervisor
-
-# Define o usuário 'www-data' como proprietário dos diretórios
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/log/supervisor /var/run
-
-# Define permissões de gravação para o grupo 
-RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/log/supervisor /var/run
-
-# Define o diretório de trabalho dentro do container
-WORKDIR /var/www/html
+RUN mkdir -p /var/www/html/storage/logs \
+           /var/www/html/bootstrap/cache \
+           /var/log/supervisor \
+           /var/run && \
+    chown -R www-data:www-data /var/www/html/storage \
+                               /var/www/html/bootstrap/cache \
+                               /var/log/supervisor \
+                               /var/run && \
+    chmod -R 777 /var/www/html/storage \
+                 /var/www/html/bootstrap/cache \
+                 /var/log/supervisor \
+                 /var/run
 
 # Isso é importante para que os processos PHP não rodem como root
 USER www-data
