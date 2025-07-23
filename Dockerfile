@@ -66,6 +66,9 @@ RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/log/su
 # Remove as dependências de compilação para reduzir o tamanho final da imagem
 RUN apk del autoconf g++ make
 
+# Copia todos os arquivos da sua aplicação para o diretório de trabalho do container
+COPY . /var/www/html
+
 # Define o diretório de trabalho dentro do container
 WORKDIR /var/www/html
 
