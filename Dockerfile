@@ -48,8 +48,17 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 # Copia a configuração do Supervisor
 COPY docker/php/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Remove as dependências de compilação para reduzir o tamanho final da imagem
+RUN apk del autoconf g++ make
+
+# Define o diretório de trabalho dentro do container
+WORKDIR /var/www/html
+
+# Copia todos os arquivos da sua aplicação para o diretório de trabalho do container
+COPY . /var/www/html
+
 # Criando pastas storage e bootstrap/cache
-RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache
+RUN mkdir -p /var/www/html/storage /var/www/html/storage/logs /var/www/html/bootstrap/cache 
 
 # Cria o diretório para os logs do Supervisor e o diretório /var/run
 RUN mkdir -p /var/log/supervisor /var/run
@@ -62,12 +71,6 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 
 # Define permissões de gravação para o grupo 
 RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/log/supervisor /var/run
-
-# Remove as dependências de compilação para reduzir o tamanho final da imagem
-RUN apk del autoconf g++ make
-
-# Copia todos os arquivos da sua aplicação para o diretório de trabalho do container
-COPY . /var/www/html
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /var/www/html
