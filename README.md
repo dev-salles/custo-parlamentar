@@ -6,6 +6,10 @@ Uma vez coletados, esses dados são cuidadosamente persistidos em um banco de da
 
 ---
 
+**Confira o projeto em deploy:** [Custo Parlamentar - Câmara dos Deputados](https://custo-parlamentar.onrender.com/deputados)
+
+---
+
 ## Importância do Projeto
 
 A relevância do Custo Parlamentar transcende o aspecto técnico, impactando diretamente a transparência e a fiscalização do dinheiro público:
