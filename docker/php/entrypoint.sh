@@ -5,12 +5,22 @@ set -e
 
 echo "Iniciando o script de entrypoint..."
 
-# Iniciar Nginx em segundo plano para o Health Check do Render
+# === NOVO: Iniciar Nginx em segundo plano para o Health Check do Render ===
 echo "Iniciando Nginx para Health Check..."
+
+# --- NOVO: Testar a configuração do Nginx antes de iniciar ---
+echo "Testando a configuração Nginx..."
+# Use -c para especificar o arquivo de configuração, caso haja alguma dúvida.
+# Redirecionar a saída para stdout/stderr para ver nos logs do Render
+/usr/sbin/nginx -t -c /etc/nginx/nginx.conf >> /dev/stdout 2>&1
+echo "Teste de configuração Nginx concluído. Código de saída: $?"
+
 # O Nginx rodará em background, escutando na porta 80 para o Health Check do Render.
-/usr/sbin/nginx -g 'daemon off;' &
+# Redirecionar a saída do Nginx para stdout/stderr para garantir visibilidade nos logs do container
+/usr/sbin/nginx -g 'daemon off;' >> /dev/stdout 2>&1 &
 # Um pequeno atraso para o Nginx ter certeza de que iniciou antes do próximo passo
-sleep 1
+sleep 2
+
 
 
 # Aguarda o banco de dados estar disponível usando o script compatível com sh
