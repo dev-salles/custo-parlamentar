@@ -52,9 +52,17 @@ COPY docker/php/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # NOVO: Criar um arquivo de configuração mínimo para o Nginx interno (para o Health Check) 
 COPY docker/php/healthcheck_nginx.conf /etc/nginx/nginx.conf
 
-# Criar uma página de status para o Health Check
-# Isso garante que a rota /healthz retorne um 200 OK
-RUN mkdir -p /var/www/healthz && echo "OK" > /var/www/healthz/index.html
+# Criar diretórios de log e temporários do Nginx e ajustar permissões
+RUN mkdir -p /var/lib/nginx/logs \
+             /var/lib/nginx/tmp/client_body \
+             /var/lib/nginx/tmp/proxy \
+             /var/lib/nginx/tmp/fastcgi \
+             /var/lib/nginx/tmp/uwsgi \
+             /var/lib/nginx/tmp/scgi && \
+    # Definir o proprietário desses diretórios para www-data
+    chown -R www-data:www-data /var/lib/nginx && \
+    # Criar a página de status para o Health Check
+    mkdir -p /var/www/healthz && echo "OK" > /var/www/healthz/index.html
 
 # Remove as dependências de compilação para reduzir o tamanho final da imagem
 RUN apk del autoconf g++ make
