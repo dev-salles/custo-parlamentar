@@ -5,22 +5,20 @@ set -e
 
 echo "Iniciando o script de entrypoint..."
 
-# === Iniciar Nginx em segundo plano para o Health Check do Render ===
-echo "Iniciando Nginx para Health Check..."
-
 # --- NOVO: Testar a configuração do Nginx antes de iniciar ---
 echo "Testando a configuração Nginx (/etc/nginx/nginx.conf)..."
-# Use -c para especificar o arquivo de configuração, caso haja alguma dúvida.
-# Redirecionar a saída para stdout/stderr para ver nos logs do Render
-/usr/sbin/nginx -t -c /etc/nginx/nginx.conf >> /dev/stdout 2>&1
+# Usamos -c para especificar o arquivo de configuração.
+# Usamos -e /dev/null para silenciar o log de erro durante o teste de configuração.
+# Isso evita o alerta de "could not open error log file" durante o teste.
+/usr/sbin/nginx -t -c /etc/nginx/nginx.conf -e /dev/null >> /dev/stdout 2>&1
 NGINX_TEST_EXIT_CODE=$?
 echo "Teste de configuração Nginx concluído. Código de saída: ${NGINX_TEST_EXIT_CODE}"
 
-# Opcional: se o teste falhar, pode-se decidir sair do script aqui.
- if [ "${NGINX_TEST_EXIT_CODE}" -ne 0 ]; then
-   echo "Erro na configuração Nginx. Saindo."
-   exit 1
- fi
+# Verificar o código de saída do teste. Se falhar, o script deve sair.
+if [ "${NGINX_TEST_EXIT_CODE}" -ne 0 ]; then
+  echo "ERRO: O teste de configuração Nginx falhou. Verifique os logs acima."
+  exit 1
+fi
 
 # O Nginx rodará em background, escutando na porta 80 para o Health Check do Render.
 # Redirecionar a saída do Nginx para stdout/stderr para garantir visibilidade nos logs do container

@@ -59,8 +59,12 @@ RUN mkdir -p /var/lib/nginx/logs \
              /var/lib/nginx/tmp/fastcgi \
              /var/lib/nginx/tmp/uwsgi \
              /var/lib/nginx/tmp/scgi && \
+    # === NOVO: Criar diretório para o PID do Nginx ===
+    mkdir -p /run/nginx && \
     # Definir o proprietário desses diretórios para www-data
     chown -R www-data:www-data /var/lib/nginx && \
+    # === NOVO: Ajustar permissão para o diretório PID do Nginx ===
+    chown -R www-data:www-data /run/nginx && \
     # Criar a página de status para o Health Check
     mkdir -p /var/www/healthz && echo "OK" > /var/www/healthz/index.html
 
