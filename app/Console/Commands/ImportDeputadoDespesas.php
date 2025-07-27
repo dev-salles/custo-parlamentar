@@ -13,7 +13,7 @@ class ImportDeputadoDespesas extends Command
      *
      * @var string
      */
-    protected $signature = 'import:despesas-deputados'; // Você pode escolher um nome que faça sentido
+    protected $signature = 'import:despesas-deputados';
 
     /**
      * The console command description.
@@ -49,7 +49,7 @@ class ImportDeputadoDespesas extends Command
         }
 
         $bar->finish();
-        $this->newLine(); // Pula uma linha após a barra de progresso
+        $this->newLine();
         $this->info('Todos os Jobs de despesas de deputados foram despachados para a fila!');
         $this->info('Certifique-se de que seu worker de fila está rodando (php artisan queue:work).');
     }

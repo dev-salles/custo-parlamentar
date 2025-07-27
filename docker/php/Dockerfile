@@ -9,11 +9,9 @@ RUN apk add --no-cache \
     mysql-client \
     git \
     supervisor \
-    # Dependências de compilação
     autoconf \
     g++ \
     make \
-    # Outras dependências comuns
     libxml2-dev \
     icu-dev 
 

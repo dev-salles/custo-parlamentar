@@ -13,33 +13,26 @@ echo "Aguardando o banco de dados MySQL estar pronto..."
 echo "Executando as migrações do Laravel..."
 php artisan migrate --force
 
-# --- COMANDO: Executa composer install se a pasta vendor não existir ---
+# Executa composer install se a pasta vendor não existir
 if [ ! -d "/var/www/html/vendor" ]; then
     echo "Pasta 'vendor' não encontrada. Executando composer install..."
     composer install --no-interaction --prefer-dist --optimize-autoloader
 else
     echo "Pasta 'vendor' já existe. Pulando composer install."
 fi
-# --- FIM DO COMANDO ---
 
-# --- COMANDO: Executa import:deputados se a tabela estiver vazia ---
+# Executa import:deputados se a tabela estiver vazia
 echo "--- Verificação de Deputados ---"
 echo "Verificando contagem inicial da tabela 'deputados'..."
-# Removido 2>/dev/null para ver quaisquer erros do seeder durante o debug
 DEPUTADOS_COUNT=$(php artisan db:seed --class="CheckDeputadosTableSeeder" --force | tail -n 1)
 echo "Contagem inicial de deputados: '$DEPUTADOS_COUNT'"
 
+# Processa o job de importação de deputados imediatamente
 if [ "$DEPUTADOS_COUNT" = "0" ]; then
     echo "Tabela de deputados vazia. Despachando job de importação..."
     php artisan import:deputados # Despacha o job
-    echo "Job para processar deputados despachado. Processando fila para conclusão..."
-    # Processa o job de importação de deputados imediatamente
-    # --once: processa apenas um job e sai
-    # --stop-when-empty: sai se não houver jobs na fila
-    # --queue=default: especifica a fila padrão (ajuste se usar filas nomeadas)
-    # --verbose: para mais logs do worker
+    echo "Job para processar deputados despachado. Processando fila para conclusão..."  
     php artisan queue:work --once --stop-when-empty --timeout=300 --tries=1 --queue=default --verbose
-    # Adicionando um pequeno atraso para garantir que o DB seja atualizado, se houver latência
     sleep 5
     echo "Processamento da fila para importação de deputados concluído."
 
@@ -58,22 +51,20 @@ if [ "$DEPUTADOS_COUNT" = "0" ]; then
 else
     echo "Dados de deputados já existem no banco. Pulando importação de deputados."
 fi
-# --- FIM DO COMANDO ---
 
-# --- COMANDO: Executa import:despesas-deputados se a tabela estiver vazia ---
+# Executa import:despesas-deputados se a tabela estiver vazia
 echo "--- Verificação de Despesas ---"
 echo "Verificando contagem inicial da tabela 'despesas'..."
 DESPESAS_COUNT=$(php artisan db:seed --class="CheckDespesasDeputadosTableSeeder" --force 2>/dev/null | tail -n 1)
 echo "Contagem inicial de despesas: '$DESPESAS_COUNT'"
 
-# --- CORREÇÃO AQUI: Verifica se a contagem é '0' OU se a string está vazia ---
+# Verifica se a contagem é '0' OU se a string está vazia
 if [ "$DESPESAS_COUNT" = "0" ] || [ -z "$DESPESAS_COUNT" ]; then
     echo "Tabela de despesas de deputados vazia ou a contagem retornou vazia. Importando dados de despesas de deputados..."
     php artisan import:despesas-deputados
 else
     echo "Dados de despesas de deputados já existem no banco. Pulando importação de despesas de deputados."
 fi
-# --- FIM DA CORREÇÃO ---
 
 # Inicia o Supervisor, que gerenciará o PHP-FPM e o queue:work
 echo "Iniciando Supervisor..."
