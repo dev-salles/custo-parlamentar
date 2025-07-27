@@ -6,7 +6,7 @@ use App\Models\Deputado;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class DeputadoController extends Controller
+class DeputadoController
 {
     /**
      * Exibe a lista paginada de deputados.
