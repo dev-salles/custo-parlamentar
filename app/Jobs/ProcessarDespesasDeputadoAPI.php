@@ -29,11 +29,8 @@ class ProcessarDespesasDeputadoAPI implements ShouldQueue
     {
         Log::info("Iniciando busca de despesas para o deputado: {$this->deputado->nome} (ID API: {$this->deputado->id_api})");
 
-        // Você pode parametrizar o ano e mês se quiser buscar dados históricos.
-        // Para a API da Câmara, geralmente você precisa passar ano e mês.
-        // Vamos buscar para o ano e mês do exemplo da API.
-        $ano = 2025; // Exemplo do dado da API
-        $mes = 5;    // Exemplo do dado da API
+        $ano = 2025;
+        $mes = 5;   
 
         $despesasApi = $this->camaraService->getDespesasDeputado(
             $this->deputado->id_api,
@@ -48,10 +45,6 @@ class ProcessarDespesasDeputadoAPI implements ShouldQueue
 
         foreach ($despesasApi as $despesaData) {
             try {
-                // Usar uma combinação de campos para updateOrCreate para evitar duplicatas,
-                // já que a API não fornece um ID único para cada item de despesa,
-                // mas sim para o documento (codDocumento ou numDocumento).
-                // A dataDocumento e valorDocumento podem ajudar a tornar a chave ainda mais única.
                 Despesa::updateOrCreate(
                     [
                         'deputado_id' => $this->deputado->id, // Chave estrangeira para o Deputado local

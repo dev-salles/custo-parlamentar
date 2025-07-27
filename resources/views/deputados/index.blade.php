@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <link rel="icon" type="image/png" href="/favicon.ico"> 
-    
-    <title>Custo Parlamentar - Câmara dos Deputados</title>
-    
+    <title>Custo Parlamentar - Câmara dos Deputados</title>   
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>

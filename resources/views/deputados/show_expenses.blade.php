@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Despesas de {{ $deputado->nome }}</title>
     <link rel="icon" type="image/png" href="/favicon.ico"> 
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <style>
-        /* Adicione esta regra CSS no início do seu bloco <style> */
         * {
-            box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura/altura */
+            box-sizing: border-box;
         }
 
         body { 
@@ -18,7 +19,7 @@
             display: flex; 
             flex-direction: column; 
             min-height: 100vh; 
-            overflow-x: hidden; /* Adicione esta linha para esconder barras de rolagem horizontais indesejadas */
+            overflow-x: hidden; 
         }
         
         .content-wrapper { 

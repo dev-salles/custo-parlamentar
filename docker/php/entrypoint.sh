@@ -5,11 +5,8 @@ set -e
 
 echo "Iniciando o script de entrypoint..."
 
-# --- NOVO: Testar a configuração do Nginx antes de iniciar ---
+# Testar a configuração do Nginx antes de iniciar
 echo "Testando a configuração Nginx (/etc/nginx/nginx.conf)..."
-# Usamos -c para especificar o arquivo de configuração.
-# Usamos -e /dev/null para silenciar o log de erro durante o teste de configuração.
-# Isso evita o alerta de "could not open error log file" durante o teste.
 /usr/sbin/nginx -t -c /etc/nginx/nginx.conf -e /dev/null >> /dev/stdout 2>&1
 NGINX_TEST_EXIT_CODE=$?
 echo "Teste de configuração Nginx concluído. Código de saída: ${NGINX_TEST_EXIT_CODE}"
@@ -23,7 +20,6 @@ fi
 # O Nginx rodará em background, escutando na porta 80 para o Health Check do Render.
 # Redirecionar a saída do Nginx para stdout/stderr para garantir visibilidade nos logs do container
 /usr/sbin/nginx -g 'daemon off;' >> /dev/stdout 2>&1 &
-# Um pequeno atraso para o Nginx ter certeza de que iniciou antes do próximo passo
 sleep 2
 
 
